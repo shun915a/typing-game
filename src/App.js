@@ -10,6 +10,8 @@ function App() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [typedChars, setTypedChars] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,13 +22,28 @@ function App() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!isLoading) {
+      setStartTime(Date.now());
+    }
+  }, [isLoading]);
+
+  const updateElapsedTime = () => {
+    const currentTime = Date.now();
+    const elapsedTimeSeconds = (currentTime - startTime) / 1000;
+    setElapsedTime(elapsedTimeSeconds);
+  };
+
   const nextWord = () => {
+    updateElapsedTime();
     setCurrentWordIndex((prevIndex) => prevIndex + 1);
   };
 
   const incrementCount = (count) => {
     setTypedChars((prevCount) => prevCount + count);
   };
+
+  const wpm = (typedChars / 5) * (60 / elapsedTime);
 
   if (isLoading) {
     return (
@@ -45,7 +62,7 @@ function App() {
           nextWord={nextWord}
           incrementCount={incrementCount}
         />
-        <TypingStats typedChars={typedChars} />
+        <TypingStats typedChars={typedChars} wpm={wpm} />
       </VStack>
     </Box>
   );

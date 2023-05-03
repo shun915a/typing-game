@@ -1,12 +1,20 @@
 import React from 'react';
-import { Box, Text, Heading } from '@chakra-ui/react';
+import { Box, Text, Heading, VStack } from '@chakra-ui/react';
 
-const TypingStats = ({ typedChars }) => {
+const TypingStats = ({ typedChars, wpm }) => {
+  const displayWpm = !isNaN(wpm) ? wpm.toFixed(2) : '---';
+
   return (
-    <Box>
-      <Heading mb={4}>Typed Characters:</Heading>
-      <Text fontSize="2xl">{typedChars}</Text>
-    </Box>
+    <VStack alignItems="stretch" spacing={4}>
+      <Box>
+        <Heading mb={2}>Typed Characters:</Heading>
+        <Text fontSize="2xl">{typedChars}</Text>
+      </Box>
+      <Box>
+        <Heading mb={2}>Words Per Minute:</Heading>
+        <Text fontSize="2xl">{displayWpm}</Text>
+      </Box>
+    </VStack>
   );
 };
 
